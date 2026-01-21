@@ -1,0 +1,42 @@
+{% comment %}
+  Varhide Variant Filter Block
+  - Works ONLY for single-option products
+  - Controlled by Admin Enable / Disable
+{% endcomment %}
+
+{% assign varhide_enabled = app.metafields.varhide.enabled | default: false %}
+
+{% if product and product.options.size == 1 and product.variants.size > 0 %}
+
+  {%- assign hidden_values = '' -%}
+
+  {% for variant in product.variants %}
+    {% unless variant.available %}
+      {% if hidden_values != '' %}
+        {% assign hidden_values = hidden_values | append: ',' %}
+      {% endif %}
+      {% assign hidden_values = hidden_values
+        | append: '"' | append: variant.option1 | append: '"' %}
+    {% endunless %}
+  {% endfor %}
+
+  <!-- Varhide data payload -->
+  <script id="varhide-hidden-variants" type="application/json">
+  {
+    "enabled": {{ varhide_enabled | json }},
+    "hidden_option_values": [{{ hidden_values }}]
+  }
+  </script>
+
+  <!-- Load JS (NON-blocking, Shopify-safe) -->
+  <script src="{{ 'varhide.js' | asset_url }}" defer></script>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Varhide Variant Filter",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,38 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "d0e42f44caeca51b7150efd212864926"
+name = "varhide-app"
+
+# 🔴 IMPORTANT: Real dev URL
+application_url = "https://involves-knitting-clothes-schedules.trycloudflare.com"
+
+embedded = true
+
+[webhooks]
+api_version = "2026-01"
+
+  [[webhooks.subscriptions]]
+  topics = [ "inventory_levels/update" ]
+  uri = "/webhooks/inventory_levels/update"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+[access_scopes]
+scopes = "read_inventory,read_products,write_inventory,write_products"
+
+[auth]
+# 🔴 IMPORTANT: Correct redirect URLs
+redirect_urls = [
+  "https://involves-knitting-clothes-schedules.trycloudflare.com/auth/login",
+  "https://involves-knitting-clothes-schedules.trycloudflare.com/auth/callback",
+  "https://involves-knitting-clothes-schedules.trycloudflare.com/app/billing/callback"
+]
+
+[build]
+automatically_update_urls_on_dev = true
